@@ -1,0 +1,77 @@
+SELECT Company,Country,Total_Laid_Off
+ FROM `sachinnomula-layoff.layoffs_analysis.layoffs_dbl` ;
+
+
+ /*Lets see the list of companies in india with thier laid_off numbers
+ */
+ select Company,Country,Total_Laid_Off
+ from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+ where Country ="India"
+ order by Total_Laid_Off desc
+ limit 3;
+
+ /* Total no.of people who where laidoff in USA*/
+ select sum(Total_Laid_Off) as Total_layoffs
+  from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+  where Country='United States';
+
+/* Total no.of layoffs country wise
+and top 3 countries with high layoffs
+by considering financial and educational startups*/
+select Country, sum(Total_Laid_Off) as Total_layoffs
+from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+where Industry in ("Finance","Education")
+group by Country
+order by Total_layoffs desc
+limit 3;
+
+/*show the total layoffs of industry-wise and only show those industries having atleat 1000 layoffs*/
+select Industry,sum(Total_Laid_Off) as Total_layoffs
+from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+group by Industry
+having sum(Total_Laid_Off)>=1000
+order by sum(Total_Laid_Off) desc
+limit 2; 
+
+
+/* show top three months having highest layoffs*/
+
+select extract(month from Date) as mnth,sum(Total_Laid_Off) as Total_layoff
+from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+group by mnth
+order by Total_layoff desc
+limit 3;
+/* create a report showing compan stage and layoffs*/
+
+select Stage, sum(Total_Laid_Off) as Total_layoff
+from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+group by Stage
+order by Total_layoff desc;
+
+/* show list of top 5 cities having highest layoffs*/
+select Location,sum(Total_Laid_Off) as Total_layoffs
+from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+group by Location
+order by Total_layoffs desc
+limit 5;
+
+/* show list of top 5 indian industries having layoffs*/
+
+select Industry, sum(Total_Laid_Off) as Total_layoffs
+from `sachinnomula-layoff.layoffs_analysis.layoffs_dbl`
+where Country='India'
+group by Industry
+order by Total_layoffs desc
+limit 5;
+
+
+
+
+
+
+
+
+
+
+
+
